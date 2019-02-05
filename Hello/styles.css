@@ -1,0 +1,78 @@
+body{
+    font-family: 'Lato', sans-serif;
+    font-family: 'Signika', sans-serif;
+font-family: 'Signika Negative', sans-serif;
+}
+body{
+  background: rgb(234, 237, 241);
+  margin-top: 50px;
+  margin-left:100px;
+  margin-right:70px;
+}
+.user img{
+    margin-top:35px;
+    border-radius: 120px;
+    margin-left:25px;
+    height: 150px;
+    -webkit-border-radius: 120px;
+    -moz-border-radius: 120px;
+    -ms-border-radius: 120px;
+    -o-border-radius: 120px;
+}
+.userInfo{
+    float:left;
+    width: 435px;
+    height: 295px;
+    display:flex;
+    flex-direction: column;
+}
+.user-text p{
+    font-size:18px;
+}
+.user-text{
+    font-size:20px;
+    line-height: 0.7em;
+    text-align: left;
+    margin-left: 40px;
+    margin-top:70px;
+
+}
+.user{   
+    display:flex;
+    flex-direction: row;
+}
+.colorWhite{
+    background: white;
+}
+address{
+    height: 295px;
+    margin-left:525px;
+}
+footer{
+    text-align: center;
+    margin-top:50px;
+}
+.user-links{
+    display:flex;
+    margin-top:25px;
+    height: 80px;
+}
+
+.link{
+    display:inline-block;
+    width: 109px;
+    height: 80px;
+    background:#bdc3c7 url("img/userLinks.png") no-repeat;
+}
+.link-1{
+    background-position:0 0;
+}
+.link-2{
+    background-position: -109px 0;
+}
+.link-3{
+    background-position: -218px 0;
+}
+.link-4{
+    background-position: -326px 0;
+}
