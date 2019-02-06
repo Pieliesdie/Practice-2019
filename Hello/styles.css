@@ -1,7 +1,8 @@
-body{
+h1,h2,h3{
+    font-family: 'Signika Negative', sans-serif;
+}
+p{
     font-family: 'Lato', sans-serif;
-    font-family: 'Signika', sans-serif;
-font-family: 'Signika Negative', sans-serif;
 }
 body{
   background: rgb(234, 237, 241);
@@ -20,6 +21,7 @@ body{
     -o-border-radius: 120px;
 }
 .userInfo{
+    margin-right: 90px;
     float:left;
     width: 435px;
     height: 295px;
@@ -46,12 +48,13 @@ body{
 }
 address{
     height: 295px;
-    margin-left:525px;
+    width: 815px;
+    font-style:normal;
+    display:flex;
+    flex-direction: column;
+    flex-wrap:wrap;
 }
-footer{
-    text-align: center;
-    margin-top:50px;
-}
+
 .user-links{
     display:flex;
     margin-top:25px;
@@ -59,7 +62,6 @@ footer{
 }
 
 .link{
-    display:inline-block;
     width: 109px;
     height: 80px;
     background:#bdc3c7 url("img/userLinks.png") no-repeat;
@@ -75,4 +77,85 @@ footer{
 }
 .link-4{
     background-position: -326px 0;
+}
+address div{
+width:50%;
+}
+.address-text{
+    text-align: justify;
+    margin-left:30px;
+    font-size:18px;
+    margin-top:13px;
+    line-height: 1.6em;
+
+}
+.address-text h2{
+    font-size:38px;
+}
+.contacts-container{
+    margin-left:20px;
+    display: flex;  
+    height: 50px;
+}
+
+.contacts{
+    
+    margin-right: 30px;
+    width: 50px;
+    height: 35px;
+    background:#bdc3c7 url("img/contacts.png") no-repeat;
+}
+.contact-1{
+    background-position: -3px 0;
+}
+.contact-2{
+    background-position: -75px 0;
+}
+.contact-3{
+    background-position: -160px 0;
+}
+.contact-4{
+    background-position: -225px 0;
+}
+.contact-5{
+    background-position: -300px 0;
+}
+.contact-6{
+    background-position: -370px 0;
+}
+.sites{
+    margin-left:74px;
+    margin-top:85px;
+    font-size:20px;
+}
+.site{
+    margin-top:-10px;
+    color:red;
+    letter-spacing:2px;
+}
+hr{
+    width:280px;
+    margin-left:-0px;
+}
+footer * {
+    display:inline-block;
+}
+footer p{
+    font-size: 18px;
+}
+footer {  
+    margin-top:50px;
+    text-align: center;
+    font-style: italic;
+}
+footer div{ 
+    vertical-align: middle;
+    width: 50px;
+    height: 40px;
+}
+.left-cv{
+    background: url("img/left-cv.png") no-repeat;
+}
+.right-cv{
+    background: url("img/right-cv.png") no-repeat;
 }
