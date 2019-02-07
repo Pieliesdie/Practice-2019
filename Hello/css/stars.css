@@ -1,0 +1,23 @@
+.stars {
+    /*background: url("../img/star.png") no-repeat ;*/
+    float:right;
+    margin-right: 30px;
+}
+.stars img{
+    display:inline;
+    background-size: cover;
+    height: 16px;
+    width: 16px;
+}
+.space{
+    height:1250px;
+    text-align: center;
+}
+.block{
+    color:white;
+    background: rgb(219,225,232);
+    height: 20px;
+    width: 50px;
+    margin-left:15px;
+    margin-top:-4px;
+}

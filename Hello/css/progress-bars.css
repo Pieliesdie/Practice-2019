@@ -1,0 +1,127 @@
+.icons div{
+    display: inline-block;
+    padding-right: 17px;
+    height: 79px;
+    width:80px;
+    padding-top:88px;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: -38px;
+}
+.icons{
+    margin-top: -15px;
+}
+.progressbar-left{
+    display: inline-block;
+    width: 45%;
+    margin-right: 7%;
+    margin-bottom: 40px;
+}
+.progressbar-right {
+    width: 45%;
+    display: inline-block;
+}
+.progressbar-left .progress div{
+    background: rgb(16,205,193);
+}
+.progressbar-right .progress div{
+    background: rgb(22,196,236);
+}
+.progress {
+    margin-top:-12px;
+    height: 15px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    overflow: hidden;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+}
+  .progress div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+.computer{
+    background: url("../img/Computer.png") no-repeat;
+}
+.film{
+    background: url("../img/film.png") no-repeat;
+}
+.headphones{
+    background: url("../img/headphones.png") no-repeat;
+}
+.briliant{
+    background: url("../img/briliant.png") no-repeat;
+
+}
+.knife{
+    background: url("../img/knife.png") no-repeat;
+
+}
+.air{
+    background: url("../img/air.png") no-repeat;
+}
+.tooltip {
+    position: relative;
+  }
+  .tooltiptext{
+      font-size: 12px;
+  }
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 36px;
+    background-color: rgb(52,73,94);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 60%;
+
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(52,73,94) transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+  .first-bar .tooltiptext{
+    left:73%/*value % minus padding(7%) %*/
+  }
+  .second-bar .tooltiptext{
+    left:48%
+  }
+  .third-bar .tooltiptext{
+    left:88%
+  }
+  .fourths-bar .tooltiptext{
+    left:78%
+  }
+
+  .fives-bar .tooltiptext{
+      left:53%
+  }
+
+  .six-bar .tooltiptext{
+    left:68%
+  }
+  .seven-bar .tooltiptext{
+    left:48%
+  }
+  .eight-bar .tooltiptext{
+    left:53%
+  }
