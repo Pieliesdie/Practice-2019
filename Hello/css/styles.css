@@ -97,18 +97,19 @@ width:50%;
     font-size:38px;
 }
 .contacts-container{
+    vertical-align: top;
     margin-left:20px;
     display: flex;  
     height: 50px;
 }
 .contacts{
-    
     margin-right: 30px;
     width: 50px;
     height: 35px;
 
 }
 .contact-1{
+    margin-top:-4px;
     background: white url(../img/contact-1.png) no-repeat;
 }
 .contact-2{
