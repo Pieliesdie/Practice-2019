@@ -67,21 +67,20 @@ address{
 }
 
 .link{
-    width: 109px;
-    height: 80px;
-    background:#bdc3c7 url("../img/userLinks.png") no-repeat;
+    width: 115px;
+    height: 81px;
 }
 .link-1{
-    background-position:0 0;
+    background: rgb(22,196,236) url(../img/link1.png) no-repeat;
 }
 .link-2{
-    background-position: -109px 0;
+    background: rgb(250,83,81) url(../img/link2.png) no-repeat;
 }
 .link-3{
-    background-position: -218px 0;
+    background: rgb(16,205,193) url(../img/link3.png) no-repeat;
 }
 .link-4{
-    background-position: -326px 0;
+    background: rgb(51,73,95) url(../img/link4.png) no-repeat;
 }
 address div{
 width:50%;
@@ -102,31 +101,30 @@ width:50%;
     display: flex;  
     height: 50px;
 }
-
 .contacts{
     
     margin-right: 30px;
     width: 50px;
     height: 35px;
-    background:#bdc3c7 url("../img/contacts.png") no-repeat;
+
 }
 .contact-1{
-    background-position: -3px 0;
+    background: white url(../img/contact-1.png) no-repeat;
 }
 .contact-2{
-    background-position: -75px 0;
+    background: white url(../img/contact-2.png) no-repeat;
 }
 .contact-3{
-    background-position: -160px 0;
+    background: white url(../img/contact-3.png) no-repeat;
 }
 .contact-4{
-    background-position: -225px 0;
+    background: white url(../img/contact-4.png) no-repeat;
 }
 .contact-5{
-    background-position: -300px 0;
+    background: white url(../img/contact-5.png) no-repeat;
 }
 .contact-6{
-    background-position: -370px 0;
+    background: white url(../img/contact-6.png) no-repeat;
 }
 .sites{
     margin-left:74px;
