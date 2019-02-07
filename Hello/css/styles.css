@@ -220,7 +220,7 @@ main>div{
     text-align: justify;
 }
 .news-footer>span{
-    display: inline-block;
+    vertical-align: top;
     margin-left:5px;
 }
 .location{
@@ -260,7 +260,7 @@ main>div{
 .text p{
     letter-spacing:0.1px;
 }
-.news-footer .date{
+.leftcolumn .news-footer .date{
     letter-spacing: 1px;
     padding-left:10px;
 }
