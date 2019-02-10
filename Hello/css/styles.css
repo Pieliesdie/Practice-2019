@@ -391,11 +391,11 @@ color:rgb(0,185,216);
 }
 .news-8 .news-footer{
     margin-top:0px;
-    margin-bottom:0px;
+    margin-bottom:-7px;
 }
 .news-8 .decription-2{
     letter-spacing: 0.3px !important;
-    margin-bottom:10px;
+    margin-bottom:5px;
 }
 .new .news-footer .date{
     letter-spacing: 0.5px;
