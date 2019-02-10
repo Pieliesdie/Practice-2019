@@ -72,7 +72,6 @@
       font-size: 12px;
   }
   .tooltip .tooltiptext {
-    visibility: hidden;
     width: 36px;
     background-color: rgb(52,73,94);
     color: #fff;
@@ -96,9 +95,7 @@
     border-color: rgb(52,73,94) transparent transparent transparent;
   }
   
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
+
   .first-bar .tooltiptext{
     left:73%/*value % minus padding(7%) %*/
   }

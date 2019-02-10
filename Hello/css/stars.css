@@ -9,15 +9,18 @@
     height: 16px;
     width: 16px;
 }
-.space{
-    height:1250px;
-    text-align: center;
-}
+
 .block{
+    padding-top:3px;
+    font-size:25px;
+    border-radius:2px;
     color:white;
     background: rgb(219,225,232);
-    height: 20px;
-    width: 50px;
-    margin-left:15px;
-    margin-top:-4px;
+    height: 32px;
+    width: 70px;
+    margin-left:10%;
+    -webkit-border-radius:2px;
+    -moz-border-radius:2px;
+    -ms-border-radius:2px;
+    -o-border-radius:2px;
 }
