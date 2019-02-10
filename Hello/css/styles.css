@@ -167,8 +167,7 @@ hr{
 }
 
 footer{
-
-    margin-top:-267px;
+margin-top:10px;
     margin-left:380px;
 }
 .left-cv,.right-cv{
@@ -189,10 +188,10 @@ main>div{
 .space{
     text-align: center;
     width: 85px;
-    height: 1475px;
+    height: 1200px;
 }
 .timeline {
-    height: 72%;
+    height: 88%;
     margin-left: 50%;
     padding: 3em 2em 2em;
 	position: relative;
@@ -372,23 +371,31 @@ main>div{
 .news-5 .news-footer{
     margin-top:30px;
 }
+.news-5 .decription-2{
+    color:rgb(0,185,216);
+    }
 .news-6 .news-footer{
     margin-top:30px;
+}
+.news-6 .decription-2{
+color:rgb(0,185,216);
 }
 .news-7 .news-footer{
     margin-top:0px ;
     margin-bottom:0px;
 }
 .news-7 .decription-2{
+    letter-spacing: 0.3px !important;
     margin-top:0px;
-    margin-bottom:5px;
+    margin-bottom:10px;
 }
 .news-8 .news-footer{
     margin-top:0px;
     margin-bottom:0px;
 }
 .news-8 .decription-2{
-    margin-bottom:0px;
+    letter-spacing: 0.3px !important;
+    margin-bottom:10px;
 }
 .new .news-footer .date{
     letter-spacing: 0.5px;
@@ -400,7 +407,7 @@ main>div{
 }
 .rightcolumn .new .decription-2{
     margin-left:8px;
-    font-size:15px;
+    font-size:17px;
     letter-spacing: 0.1px;
 }
 .rightcolumn .news-footer{
