@@ -1,20 +1,38 @@
-# Practice-2019
-## _home page project_
+Привет мир!
+Я узнал про markdown.
 
-### Used technologyes:
-html | css
------------- | -------------
-#### I don't know what to write, so I will write a recipe for cabbage rolls. 
-* Cabbage - 1 head
-* Rice - 200 g
-* Minced meat - 500 g
-* Salt - 1 tsp
-* Seasoning - 1 tsp (to taste)
-* Ground black pepper - to taste 
-* Vegetable oil - for frying 
-##### For sauce:  
-* Sour cream - 2 tsp 
-* Tomato pasta or ketchup - 2 tsp
+# Markdown (заголовок)
 
-taked it from
-[edimdoma.ru](https://www.edimdoma.ru/retsepty/56896-podrobnyy-retsept-domashnih-golubtsov)
+Вы тоже можете узнать про markdown из статей: 
+
+* [wiki](https://ru.wikipedia.org/wiki/Markdown) 
+* [wiki](https://en.wikipedia.org/wiki/Markdown) 
+* [github](https://guides.github.com/features/mastering-markdown/)
+
+## Markdown в деталях 
+
+Filename extensions | .md, .markdown[1][2]
+
+Internet media type |                      text/markdown[2]
+
+Uniform Type Identifier (UTI) |    net.daringfireball.markdown
+
+Developed by         |                          John Gruber
+
+Initial release      |                              March 19, 2004 (14 years ago)[3][4]
+
+Latest release       |                            1.0.1 (December 17, 2004 (13 years ago)[5])
+
+Type of format       |                          Markup language
+
+Extended to         |                              MultiMarkdown, Markdown Extra, CommonMark[6]
+
+Open format?        |                           yes[7]
+
+Website              |                                http://daringfireball.net/projects/markdown
+
+ 
+
+## Реальный пример 
+
+ [github](https://github.com/Microsoft/TypeScript/blob/master/README.md) 
