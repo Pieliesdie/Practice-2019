@@ -10,7 +10,6 @@
 * [github](https://guides.github.com/features/mastering-markdown/)
 
 ## Markdown в деталях 
------------- | -------------
 Filename extensions | .md, .markdown[1][2]
 
 Internet media type |                      text/markdown[2]
@@ -30,7 +29,7 @@ Extended to         |                              MultiMarkdown, Markdown Extra
 Open format?        |                           yes[7]
 
 Website              |                                http://daringfireball.net/projects/markdown
-
+------------ | -------------
  
 
 ## Реальный пример 
