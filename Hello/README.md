@@ -1,7 +1,7 @@
 Привет мир!
 Я узнал про markdown.
 
-# Markdown (заголовок)
+# Markdown
 
 Вы тоже можете узнать про markdown из статей: 
 
@@ -10,8 +10,9 @@
 * [github](https://guides.github.com/features/mastering-markdown/)
 
 ## Markdown в деталях 
-Filename extensions | .md, .markdown[1][2]
+|
 ------------ | -------------
+Filename extensions | .md, .markdown[1][2]
 Internet media type| text/markdown[2]
 Uniform Type Identifier (UTI) |    net.daringfireball.markdown
 Developed by | John Gruber
