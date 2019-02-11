@@ -15,3 +15,6 @@ html | css
 ##### For sauce:  
 * Sour cream - 2 tsp 
 * Tomato pasta or ketchup - 2 tsp
+
+https://www.edimdoma.ru/retsepty/56896-podrobnyy-retsept-domashnih-golubtsov - automatic!
+[GitHub](http://github.com)
