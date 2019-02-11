@@ -4,7 +4,7 @@
 ### Used technologyes:
 html | css
 ------------ | -------------
-#### I do not know what to write, so I will write a recipe for cabbage rolls. 
+#### I don't know what to write, so I will write a recipe for cabbage rolls. 
 * Cabbage - 1 head
 * Rice - 200 g
 * Minced meat - 500 g
