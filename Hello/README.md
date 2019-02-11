@@ -10,7 +10,7 @@
 * [github](https://guides.github.com/features/mastering-markdown/)
 
 ## Markdown в деталях 
-
+------------ | -------------
 Filename extensions | .md, .markdown[1][2]
 
 Internet media type |                      text/markdown[2]
