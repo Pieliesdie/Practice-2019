@@ -10,16 +10,16 @@
 * [github](https://guides.github.com/features/mastering-markdown/)
 
 ## Markdown в деталях 
-Filename extensions | .md, .markdown[1][2]
+Filename extensions | .md, .markdown
 :------------ | :-------------
-Internet media type| text/markdown[2]
+Internet media type| text/markdown
 Uniform Type Identifier (UTI) |    net.daringfireball.markdown
 Developed by | John Gruber
-Initial release | March 19, 2004 (14 years ago)[3][4]
-Latest release | 1.0.1 (December 17, 2004 (13 years ago)[5])
+Initial release | March 19, 2004 (14 years ago)
+Latest release | 1.0.1 (December 17, 2004 (13 years ago))
 Type of format | Markup language
-Extended to |  MultiMarkdown, Markdown Extra, CommonMark[6]
-Open format? | yes[7]
+Extended to |  MultiMarkdown, Markdown Extra, CommonMark
+Open format? | yes
 Website |  http://daringfireball.net/projects/markdown
 
 ## Реальный пример 
