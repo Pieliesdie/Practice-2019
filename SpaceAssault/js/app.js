@@ -104,7 +104,7 @@ var gameTime = 0;
 var isGameOver;
 var terrainPattern;
 
-var mannaScore = 0;
+var mannaScore = 10;
 var score = 0;
 var scoreEl = document.getElementById('score');
 var MannaScoreEl = document.getElementById('MannaScore');
@@ -178,6 +178,7 @@ function update(dt) {
     }
 
     checkCollisions(dt);
+    
     scoreEl.innerHTML = "Score: "+ score;
     MannaScoreEl.innerHTML = "Manna: " + mannaScore;
 };
@@ -201,7 +202,7 @@ function handleInput(dt) {
 
     if (input.isDown('SPACE') &&
         !isGameOver &&
-        Date.now() - lastFire > 100) {
+        Date.now() - lastFire > 100&&mannaScore>0) {
         var x = player.pos[0] + player.sprite.size[0] / 2;
         var y = player.pos[1] + player.sprite.size[1] / 2;
 
@@ -220,6 +221,7 @@ function handleInput(dt) {
             dir: 'down',
             sprite: new Sprite('img/sprites.png', [0, 60], [9, 5])
         });
+        mannaScore--;
 
         lastFire = Date.now();
     }
@@ -356,7 +358,7 @@ function checkCollisions(dt) {
             });
             Manna.splice(i, 1);
             i--;
-            mannaScore++;
+            mannaScore+=30;;
         }
     }
 
@@ -447,7 +449,7 @@ function reset() {
     isGameOver = false;
     gameTime = 0;
     score = 0;
-    mannaScore=0;
+    mannaScore=10;
 
     Megaliths = [];
     Manna = [];
