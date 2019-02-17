@@ -31,7 +31,12 @@ canvas {
     color: white;
     font-size: 2em;
 }
-
+#MannaScore{
+    padding-right: 30px;
+    float: right;
+    color: white;
+    font-size: 2em;
+}
 .key {
     color: #aaffdd;
 }
