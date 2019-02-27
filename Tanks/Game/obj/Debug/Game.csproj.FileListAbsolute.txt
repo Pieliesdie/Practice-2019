@@ -1,0 +1,6 @@
+C:\Users\haket\source\repos\Tanks\Game\bin\Debug\Game.dll
+C:\Users\haket\source\repos\Tanks\Game\bin\Debug\Game.pdb
+C:\Users\haket\source\repos\Tanks\Game\obj\Debug\Game.csprojAssemblyReference.cache
+C:\Users\haket\source\repos\Tanks\Game\obj\Debug\Game.csproj.CoreCompileInputs.cache
+C:\Users\haket\source\repos\Tanks\Game\obj\Debug\Game.dll
+C:\Users\haket\source\repos\Tanks\Game\obj\Debug\Game.pdb
