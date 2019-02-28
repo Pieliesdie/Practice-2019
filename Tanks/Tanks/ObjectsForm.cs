@@ -13,6 +13,7 @@ namespace Tanks
     public partial class ObjectsForm : Form
     {
         MainWindow parent;
+        int delay;
 
         public ObjectsForm(MainWindow parent)
         {
@@ -21,10 +22,18 @@ namespace Tanks
             parent.OnUpdate += _Update;
         }
 
-        
+
         void _Update()
         {
-            dataGridView1.DataSource = parent.game.Objects.ToList();
+            if (delay <= 0)
+            {
+                dataGridView1.DataSource = parent.game.Objects.ToList();
+                delay = 15;
+            }
+            else
+            {
+                delay--;
+            }
         }
     }
 }

@@ -5,10 +5,9 @@ namespace Game
 {
     public class Enemy : GameObj
     {
-
         static Random rand;
 
-        public Enemy(Point pos, int speed,Size size) : base(pos,size)
+        public Enemy(Point pos, int speed,Size size,Bitmap image=null) : base(pos,size,image:image)
         {
             this.speed = speed;
             rand = new Random();
@@ -16,26 +15,26 @@ namespace Game
 
         public void Reverse()
         {
-            switch (direction)
+            switch (Direction)
             {
                 case Direction.bot:
                     {
-                        direction = Direction.top;
+                        Direction = Direction.top;
                         break;
                     }
                 case Direction.left:
                     {
-                        direction = Direction.right;
+                        Direction = Direction.right;
                         break;
                     }
                 case Direction.right:
                     {
-                        direction = Direction.left;
+                        Direction = Direction.left;
                         break;
                     }
                 case Direction.top:
                     {
-                        direction = Direction.bot;
+                        Direction = Direction.bot;
                         break;
                     }
             }
@@ -57,22 +56,22 @@ namespace Game
             {
                 case 1:
                     {
-                        direction = Direction.top;
+                        Direction = Direction.top;
                         break;
                     }
                 case 2:
                     {
-                        direction = Direction.right;
+                        Direction = Direction.right;
                         break;
                     }
                 case 3:
                     {
-                        direction = Direction.left;
+                        Direction = Direction.left;
                         break;
                     }
                 case 4:
                     {
-                        direction = Direction.bot;
+                        Direction = Direction.bot;
                         break;
                     }
             }

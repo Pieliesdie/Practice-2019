@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Game;
 
 namespace Controller
 {
@@ -18,26 +19,22 @@ namespace Controller
             {
                 case Keys.W:
                     {
-                        game.user.pos.Y -= game.user.speed;
-                        game.user.direction = Game.Direction.top;
+                        game.user.Move(Direction.top);
                         break;
                     }
                 case Keys.S:
                     {
-                        game.user.pos.Y += game.user.speed;
-                        game.user.direction = Game.Direction.bot;
+                        game.user.Move(Direction.bot);
                         break;
                     }
                 case Keys.D:
                     {
-                        game.user.pos.X += game.user.speed;
-                        game.user.direction = Game.Direction.right;
+                        game.user.Move(Direction.right);
                         break;
                     }
                 case Keys.A:
                     {
-                        game.user.pos.X -= game.user.speed;
-                        game.user.direction = Game.Direction.left;
+                        game.user.Move(Direction.left);
                         break;
                     }
                 case Keys.Space:

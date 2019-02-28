@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace Game
 {
+
     public class Game
     {
         public delegate void AfterGameOver();
         public event AfterGameOver GameOver;
 
+        public static readonly Bitmap background = new Bitmap(Properties.Resources.grass_3);
+        public static readonly Bitmap enemySprite = new Bitmap(Properties.Resources.Enemy);
+        public static readonly Bitmap playerSprite = new Bitmap(Properties.Resources.player);
+        public static readonly Bitmap bulletSprite = new Bitmap(Properties.Resources.bullet);
+
         public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Append(user);
 
-        private Size userSize = new Size(30, 30);
-        private Size enemySize = new Size(30, 30);
+        private Size userSize = new Size(60, 40);
+        private Size enemySize = new Size(60, 40);
         private Random rand = new Random();
         private readonly int countOfTanks;
         private readonly int countOfApples;
@@ -35,10 +42,10 @@ namespace Game
 
             for (int i = 0; i < countOfTanks; i++)
             {
-                enemies.Add(new Enemy(new Point(rand.Next(size.Width-10), rand.Next(size.Height-10)), speed, enemySize));
+                enemies.Add(new Enemy(new Point(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite));
             }
 
-            user = new User(new Point(size.Width / 2, size.Height / 2), userSize,this.speed+5);
+            user = new User(new Point(size.Width / 2, size.Height / 2), userSize,this.speed+5,playerSprite);
         }
 
         public void Update()
@@ -53,27 +60,24 @@ namespace Game
                 if (rand.Next(0, 100) < 2) { bullets.Add(i.Fire()); }
             }
 
-            foreach(GameObj i in bullets)
+            foreach(GameObj i in bullets.Concat(user.bullets))
             {
                 i.Update();
             }
 
-            foreach(GameObj i in user.bullets)
-            {
-                i.Update();
-            }
         }
 
         void CheckEnenymiesCollisions()//Можно ли без 5 циклов ? хм ???
         {
             List<Enemy> collisions = new List<Enemy>();
             List<Enemy> shooted = new List<Enemy>();
+            List<GameObj> splicebullet = new List<GameObj>();
 
             foreach (Enemy i in enemies)
             {
                 if (CheckBounds(i))
                 {
-                    i.Reverse();
+                    i.Reverse();//переделать
                 }
                 if (user.HitBox.IntersectsWith(i.HitBox))
                 {
@@ -85,6 +89,7 @@ namespace Game
                 {
                     if (j.HitBox.IntersectsWith(i.HitBox))
                     {
+                        splicebullet.Add(j);
                         shooted.Add(i);
                     }
                 }
@@ -100,6 +105,7 @@ namespace Game
             }
             collisions.Distinct().ToList().ForEach(x => x.Reverse());
             shooted.ForEach(x => enemies.Remove(x));
+            splicebullet.ForEach(x=>user.bullets.Remove(x));
         }
 
         void CheckBulletsCollisions()//???
@@ -131,7 +137,7 @@ namespace Game
 
         bool CheckBounds(GameObj obj)
         {
-            return obj.pos.X < 0 || obj.pos.Y < 0 || obj.pos.X > size.Width - obj.size.Width || obj.pos.Y > size.Height - obj.size.Height;
+            return obj.pos.X < 0 || obj.pos.Y < 0 || obj.pos.X > size.Width - obj.Size.Width || obj.pos.Y > size.Height - obj.Size.Height;
         }
 
     }
