@@ -20,27 +20,28 @@ namespace Tanks
         UserController controller;
         public Game.Game game;
         Graphics battlefield;
+        int gameSpeed = 100;
+
+        void Init()
+        {
+            game = new Game.Game(5, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
+            controller = new UserController(game, this);
+            game.OnGameOver += GameOver;
+            pictureBox1.BackgroundImage = Game.Game.background;
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             battlefield = pictureBox1.CreateGraphics();
-            game = new Game.Game(5, 5, 5, new Size(pictureBox1.Width, pictureBox1.Height));
-            controller = new UserController(game, this);
-            game.GameOver += GameOver;
-            this.DoubleBuffered = true;
-            pictureBox1.BackgroundImage = Game.Game.background;
+            Init();
         }
-
 
         void GameOver()
         {
-            game.GameOver -= GameOver;
             timer1.Enabled = false;
             MessageBox.Show("GameOver");
-            game = new Game.Game(5, 5, 5, new Size(pictureBox1.Width, pictureBox1.Height));
-            controller = new UserController(game, this);
-            game.GameOver += GameOver;
+            Init();
             timer1.Enabled = true;
         }
 
@@ -61,17 +62,26 @@ namespace Tanks
         }
 
         Bitmap bitmap;
-        private void timer1_Tick(object sender, EventArgs e)//что-то сделать отрисовка 400мб памяти
+        DateTime lasttime = DateTime.Now;
+
+        private void timer1_Tick(object sender, EventArgs e)
         {
+            Score_label.Text = $"Score: {game.Score}";
+            var now = DateTime.Now;
+            var dt = (float)(now - lasttime).TotalSeconds;
+            lasttime = now;
+
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             battlefield = Graphics.FromImage(bitmap);
             foreach (GameObj i in game.Objects)
             {
                 DrawObject(i);
             }
-            game.Update();
+            game.Update(dt);
             pictureBox1.Image = bitmap;
             OnUpdate?.Invoke();
+            bitmap = null;
+            GC.Collect();
         }
 
         private void objectsToolStripMenuItem_Click(object sender, EventArgs e)

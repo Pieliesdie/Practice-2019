@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Windows.Input;
 
 namespace Game
 {
     public class GameObj
-    {
+    {         
         delegate void ImageChanged();
         event ImageChanged OnImageChanged;
 
         public string name => this.ToString();
         public int speed;
-        public Point pos;
+        public PointF pos;
         protected Bitmap image;
         [Browsable(false)]//?????
         public Bitmap Image
@@ -75,7 +76,7 @@ namespace Game
 
         protected Direction Direction;
 
-        public GameObj(Point pos, Size size, int speed = 0, Direction direction = Direction.right, Bitmap image = null)
+        public GameObj(PointF pos, Size size, int speed = 0, Direction direction = Direction.right, Bitmap image = null)
         {
             this.pos = pos;
             this.Size = size;
@@ -84,30 +85,30 @@ namespace Game
             this.Image = image;
         }
 
-        public Rectangle HitBox => new Rectangle(pos, new Size(Size.Width * 120 / 100, Size.Height * 120 / 100));
+        public RectangleF HitBox => new RectangleF(pos, new SizeF(size.Width,size.Height));
 
-        public void Update()
+        public void Update(float dt)
         {
             switch (Direction)
             {
                 case Direction.bot:
                     {
-                        pos.Y += speed;
+                        pos.Y += (speed * dt);
                         break;
                     }
                 case Direction.left:
                     {
-                        pos.X -= speed;
+                        pos.X -= (speed * dt);
                         break;
                     }
                 case Direction.right:
                     {
-                        pos.X += speed;
+                        pos.X += (speed * dt);
                         break;
                     }
                 case Direction.top:
                     {
-                        pos.Y -= speed;
+                        pos.Y -= (speed * dt);
                         break;
                     }
             }
@@ -115,7 +116,7 @@ namespace Game
 
         public GameObj Fire()
         {
-            return new GameObj(new Point(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 150 / 100, Direction,Game.bulletSprite);
+            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction,Game.bulletSprite);
         }
 
         public static Image RotateImage(Image img, RotateFlipType flipType)

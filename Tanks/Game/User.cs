@@ -3,44 +3,22 @@ using System.Drawing;
 
 namespace Game
 {
-    public class User : GameObj
+    public class User : Enemy
     {
         public List<GameObj> bullets = new List<GameObj>();
 
-        public User(Point pos, Size size, int speed = 0,Bitmap image=null)
-            : base(pos, size, speed, Direction.bot,image){}
+        public User(PointF pos, Size size, int speed = 0,Bitmap image=null)
+            : base(pos, speed, size,image){}
 
         public new void Fire()
         {
             bullets.Add(base.Fire());
         }
 
-        public void Move(Direction direction)
+        public void Move(Direction direction, float dt)
         {
             base.Direction = direction;
-            switch (direction)
-            {
-                case Direction.bot:
-                    {
-                        pos.Y += speed;
-                        break;
-                    }
-                case Direction.left:
-                    {
-                        pos.X -= speed;
-                        break;
-                    }
-                case Direction.right:
-                    {
-                        pos.X += speed;
-                        break;
-                    }
-                case Direction.top:
-                    {
-                        pos.Y -= speed;
-                        break;
-                    }
-            }
+            base.Update(dt);
         }
     }
 }

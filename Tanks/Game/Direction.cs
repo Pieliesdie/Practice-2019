@@ -5,6 +5,6 @@
         top,
         left,
         right,
-        bot
+        bot,
     }
 }

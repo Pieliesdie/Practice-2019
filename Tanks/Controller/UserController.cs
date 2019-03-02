@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Game;
 
 namespace Controller
@@ -11,38 +12,17 @@ namespace Controller
         {
             this.game = game;
             form.KeyDown += KeyDown;
+            form.KeyUp += KeyUp;
+        }
+
+        private void KeyUp(object sender, KeyEventArgs e)
+        {
+            game.pressedKeys.RemoveAll(x=>x==(Key)e.KeyValue);
         }
 
         private void KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.W:
-                    {
-                        game.user.Move(Direction.top);
-                        break;
-                    }
-                case Keys.S:
-                    {
-                        game.user.Move(Direction.bot);
-                        break;
-                    }
-                case Keys.D:
-                    {
-                        game.user.Move(Direction.right);
-                        break;
-                    }
-                case Keys.A:
-                    {
-                        game.user.Move(Direction.left);
-                        break;
-                    }
-                case Keys.Space:
-                    {
-                        game.user.Fire();
-                        break;
-                    }
-            }
+            game.pressedKeys.Add((Key)e.KeyValue);
         }
     }
 

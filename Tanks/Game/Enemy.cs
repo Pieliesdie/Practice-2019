@@ -7,7 +7,7 @@ namespace Game
     {
         static Random rand;
 
-        public Enemy(Point pos, int speed,Size size,Bitmap image=null) : base(pos,size,image:image)
+        public Enemy(PointF pos, int speed, Size size, Bitmap image = null) : base(pos, size, image: image)
         {
             this.speed = speed;
             rand = new Random();
@@ -40,14 +40,11 @@ namespace Game
             }
         }
 
-        public new void Update()
+        public new void Update(float dt)
         {
-            base.Update();
-            var tmp = rand.Next(0, 100);
-            if (tmp < 5)
-            {
-                RandomDirection();
-            }
+            base.Update(dt);
+
+        
         }
 
         public void RandomDirection()
