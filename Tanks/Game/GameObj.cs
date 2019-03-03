@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Input;
 
 namespace Game
 {
     public class GameObj
-    {         
+    {
         delegate void ImageChanged();
         event ImageChanged OnImageChanged;
 
@@ -15,11 +13,13 @@ namespace Game
         public int speed;
         public PointF pos;
         protected Bitmap image;
-        [Browsable(false)]//?????
+
+        [Browsable(false)]
         public Bitmap Image
         {
             get
             {
+                NextPicture();
                 if (image == null)
                 {
                     return null;
@@ -59,16 +59,35 @@ namespace Game
                 image = value;
             }
         }
+
         public bool CanDestroy; //??????
+        public bool Done;
+        protected bool once;
+        List<Bitmap> animation;
+
+        int i;
+        void NextPicture()
+        {
+            if (animation != null && !Done)
+            {
+                if (i > animation.Count - 1)
+                {
+                    i = 0;
+                    if (once)
+                        Done = true;
+                }
+                image = animation[i++];
+            }
+        }
 
         private Size size;
-        [Browsable(false)]//??????
+        [Browsable(false)]
         public Size Size
         {
             get
             {
                 if (Direction == Direction.top || Direction == Direction.bot)
-                    return new Size(size.Height,size.Width);
+                    return new Size(size.Height, size.Width);
                 return size;
             }
             set => size = value;
@@ -76,16 +95,18 @@ namespace Game
 
         protected Direction Direction;
 
-        public GameObj(PointF pos, Size size, int speed = 0, Direction direction = Direction.right, Bitmap image = null)
+        public GameObj(PointF pos, Size size, int speed = 0, Direction direction = Direction.right, Bitmap image = null, List<Bitmap> animation = null, bool once = false)
         {
             this.pos = pos;
             this.Size = size;
             this.Direction = direction;
             this.speed = speed;
             this.Image = image;
+            this.animation = animation;
+            this.once = once;
         }
 
-        public RectangleF HitBox => new RectangleF(pos, new SizeF(size.Width,size.Height));
+        public RectangleF HitBox => new RectangleF(pos, Size);
 
         public void Update(float dt)
         {
@@ -116,7 +137,7 @@ namespace Game
 
         public GameObj Fire()
         {
-            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction,Game.bulletSprite);
+            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction, Game.bulletSprite);
         }
 
         public static Image RotateImage(Image img, RotateFlipType flipType)

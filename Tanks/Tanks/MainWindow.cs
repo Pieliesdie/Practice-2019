@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Controller;
 using Game;
-using Controller;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Tanks
 {
@@ -24,17 +18,24 @@ namespace Tanks
 
         void Init()
         {
-            game = new Game.Game(5, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
+            game = new Game.Game(1, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
             controller = new UserController(game, this);
             game.OnGameOver += GameOver;
+            game.OnWinGame += Win;
             pictureBox1.BackgroundImage = Game.Game.background;
+            timer1.Enabled = true;
         }
 
         public MainWindow()
         {
             InitializeComponent();
             battlefield = pictureBox1.CreateGraphics();
-            Init();
+        }
+
+        void Win()
+        {
+            timer1.Enabled = false;
+            MessageBox.Show("You win!");
         }
 
         void GameOver()
@@ -80,6 +81,7 @@ namespace Tanks
             game.Update(dt);
             pictureBox1.Image = bitmap;
             OnUpdate?.Invoke();
+            battlefield.Dispose();
             bitmap = null;
             GC.Collect();
         }
@@ -89,9 +91,9 @@ namespace Tanks
             new ObjectsForm(this).Show();
         }
 
-        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GameOver();
+            Init();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace Game
@@ -15,17 +14,22 @@ namespace Game
         public delegate void GameOver();
         public event GameOver OnGameOver;
 
+        public delegate void WinGame();
+        public event WinGame OnWinGame;
+
         public static readonly Bitmap background = new Bitmap(Properties.Resources.grass_3);
         public static readonly Bitmap enemySprite = new Bitmap(Properties.Resources.Enemy);
         public static readonly Bitmap playerSprite = new Bitmap(Properties.Resources.player);
         public static readonly Bitmap bulletSprite = new Bitmap(Properties.Resources.bullet);
         public static readonly Bitmap wallSprite = new Bitmap(Properties.Resources.RTS_Crate);
         public static readonly Bitmap starSprite = new Bitmap(Properties.Resources.Start_Explosion);
+        public static readonly Bitmap boomSprite = new Bitmap(Properties.Resources.boom);
 
-        public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Concat(walls).Concat(stars).Append(user);
+        public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Concat(walls).Concat(stars).Concat(animations).Append(user);
 
         private Size userSize = new Size(60, 40);
         private Size enemySize = new Size(60, 40);
+        private Size exploisonsSize = new Size(50, 50);
         private Random rand = new Random();
         public readonly int countOfTanks;
         public readonly int countOfStars;
@@ -38,6 +42,7 @@ namespace Game
         public List<GameObj> walls = new List<GameObj>();
         public List<GameObj> bullets = new List<GameObj>();
         public List<GameObj> stars = new List<GameObj>();
+        public List<GameObj> animations = new List<GameObj>();
 
         public Game(int countOfTanks, int countOfStars, int speed, Size size)
         {
@@ -52,7 +57,7 @@ namespace Game
             while (stars.Count() < countOfStars)
             {
                 var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: starSprite);
-                if (!user.HitBox.IntersectsWith(star.HitBox) &&!checkWalls(star))
+                if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
 
@@ -60,41 +65,43 @@ namespace Game
             {
                 var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallSprite);
                 walls.Add(wall);
-                if (user.HitBox.IntersectsWith(wall.HitBox)|| CheckEnenymiesCollisions(0).Count() != 0)
+                if (user.HitBox.IntersectsWith(wall.HitBox) || CheckEnenymiesCollisions(0).Count() != 0)
                 {
                     walls.Remove(wall);
-                }                  
+                }
 
             }
-            while (enemies.Count()< countOfTanks) { 
+            while (enemies.Count() < countOfTanks)
+            {
                 var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite);
                 enemies.Add(enemy);
                 if (CheckEnenymiesCollisions(0).Count() != 0)
                 {
                     enemies.Remove(enemy);
                 }
-            }          
+            }
         }
         DateTime lastFire = DateTime.Now;
 
         public void Update(float dt)
         {
+            if (enemies.Count <= 0)
+            {
+                OnWinGame?.Invoke();
+            }
+
             foreach (Enemy i in enemies)
             {
                 i.Update(dt);
 
                 if (rand.Next(0, 100) < 2) { bullets.Add(i.Fire()); }
-            }
-
-            CheckEnenymiesCollisions(dt);
-
-            foreach (var i in enemies)
-            {
                 if (rand.Next(0, 100) < 5)
                 {
                     i.RandomDirection();
                 }
             }
+
+            CheckEnenymiesCollisions(dt);
 
             CheckBulletsCollisions();
             UserUpdate(dt);
@@ -113,9 +120,17 @@ namespace Game
 
         void UserUpdate(float dt)
         {
+            List<GameObj> doneAnimation = new List<GameObj>();
+            foreach (var anim in animations)
+            {
+                if (anim.Done == true)
+                    doneAnimation.Add(anim);
+            }
+
+            doneAnimation.ForEach(x => animations.Remove(x));
             List<GameObj> starremove = new List<GameObj>();
 
-            foreach(var star in stars)
+            foreach (var star in stars)
             {
                 if (star.HitBox.IntersectsWith(user.HitBox))
                 {
@@ -123,7 +138,7 @@ namespace Game
                     starremove.Add(star);
                 }
             }
-            starremove.ForEach(x=>stars.Remove(x));
+            starremove.ForEach(x => stars.Remove(x));
             while (stars.Count() < countOfStars)
             {
                 var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: starSprite);
@@ -165,8 +180,8 @@ namespace Game
 
             foreach (Enemy i in enemies)
             {
-                if(checkWalls(i))
-                        collisions.Add(i);
+                if (checkWalls(i))
+                    collisions.Add(i);
 
 
                 if (CheckBounds(i, dt))
@@ -186,6 +201,8 @@ namespace Game
                     {
                         splicebullet.Add(j);
                         shooted.Add(i);
+                        var boom = new GameObj(j.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 13), once: true);
+                        animations.Add(boom);
                     }
                 }
 
@@ -213,9 +230,9 @@ namespace Game
 
         bool checkWalls(GameObj obj)
         {
-            foreach(var i in walls)
+            foreach (var i in walls)
             {
-                if (obj.HitBox.IntersectsWith(i.HitBox)&&i!=obj)
+                if (obj.HitBox.IntersectsWith(i.HitBox) && i != obj)
                 {
                     return true;
                 }
@@ -229,8 +246,12 @@ namespace Game
 
             foreach (GameObj i in bullets)
             {
-                if(checkWalls(i))
+                if (checkWalls(i))
+                {
                     outofrange.Add(i);
+                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 7), once: true);
+                    animations.Add(boom);
+                }
 
                 if (i.HitBox.IntersectsWith(user.HitBox))
                 {
@@ -245,7 +266,11 @@ namespace Game
             foreach (GameObj i in user.bullets)
             {
                 if (checkWalls(i))
+                {
+                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, 39), 13), once: true);
+                    animations.Add(boom);
                     outofrange.Add(i);
+                }
 
                 if (CheckBounds(i, 0))
                 {
@@ -281,5 +306,22 @@ namespace Game
             return false;
         }
 
+        static List<Bitmap> GetListFromImage(Bitmap img, Size sizeOfOneSprite, int length)
+        {
+            List<Bitmap> tmp = new List<Bitmap>();
+            var currentWidth = 0;
+            for (int i = 0; i < length; i++)
+            {
+                var btmp = new Bitmap(sizeOfOneSprite.Width, sizeOfOneSprite.Height);
+                Graphics g = Graphics.FromImage(btmp);
+                var rec = new Rectangle(currentWidth, 0, sizeOfOneSprite.Width, sizeOfOneSprite.Height);
+                g.DrawImage(img, 0, 0, rec, GraphicsUnit.Pixel);
+                tmp.Add(btmp);
+                currentWidth += sizeOfOneSprite.Width;
+                g.Dispose();
+            }
+
+            return tmp;
+        }
     }
 }
