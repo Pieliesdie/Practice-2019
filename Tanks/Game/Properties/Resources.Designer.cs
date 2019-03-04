@@ -123,9 +123,9 @@ namespace Game.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Start_Explosion {
+        internal static System.Drawing.Bitmap stars {
             get {
-                object obj = ResourceManager.GetObject("Start_Explosion", resourceCulture);
+                object obj = ResourceManager.GetObject("stars", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

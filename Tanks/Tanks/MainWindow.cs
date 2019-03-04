@@ -18,7 +18,7 @@ namespace Tanks
 
         void Init()
         {
-            game = new Game.Game(1, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
+            game = new Game.Game(5, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
             controller = new UserController(game, this);
             game.OnGameOver += GameOver;
             game.OnWinGame += Win;
@@ -29,6 +29,7 @@ namespace Tanks
         public MainWindow()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             battlefield = pictureBox1.CreateGraphics();
         }
 

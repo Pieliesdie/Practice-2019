@@ -40,7 +40,7 @@ namespace Game
         public static readonly Bitmap playerSprite = new Bitmap(Properties.Resources.player);
         public static readonly Bitmap bulletSprite = new Bitmap(Properties.Resources.bullet);
         public static readonly Bitmap wallSprite = new Bitmap(Properties.Resources.RTS_Crate);
-        public static readonly Bitmap starSprite = new Bitmap(Properties.Resources.Start_Explosion);
+        public static readonly Bitmap starSprite = new Bitmap(Properties.Resources.stars);
         public static readonly Bitmap boomSprite = new Bitmap(Properties.Resources.boom);
 
         public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Concat(walls).Concat(stars).Concat(animations).Append(user);
@@ -74,7 +74,7 @@ namespace Game
 
             while (stars.Count() < countOfStars)
             {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: starSprite);
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize,animation:GetListFromImage(starSprite,new Size(84,starSprite.Height),6));
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
@@ -159,7 +159,7 @@ namespace Game
             starremove.ForEach(x => stars.Remove(x));
             while (stars.Count() < countOfStars)
             {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: starSprite);
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6));
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
