@@ -106,7 +106,7 @@ namespace Game
             this.once = once;
         }
 
-        public RectangleF HitBox => new RectangleF(pos, Size);
+        public RectangleF HitBox => new RectangleF(pos, size);
 
         public void Update(float dt)
         {

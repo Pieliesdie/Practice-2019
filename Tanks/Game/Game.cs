@@ -74,7 +74,7 @@ namespace Game
 
             while (stars.Count() < countOfStars)
             {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize,animation:GetListFromImage(starSprite,new Size(84,starSprite.Height),6));
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6));
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
@@ -83,7 +83,7 @@ namespace Game
             {
                 var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallSprite);
                 walls.Add(wall);
-                if (user.HitBox.IntersectsWith(wall.HitBox) || CheckEnenymiesCollisions(0).Count() != 0)
+                if (user.HitBox.IntersectsWith(wall.HitBox) || CheckEnenymiesCollisions().Count() != 0)
                 {
                     walls.Remove(wall);
                 }
@@ -93,7 +93,7 @@ namespace Game
             {
                 var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite);
                 enemies.Add(enemy);
-                if (CheckEnenymiesCollisions(0).Count() != 0)
+                if (CheckEnenymiesCollisions().Count() != 0)
                 {
                     enemies.Remove(enemy);
                 }
@@ -110,16 +110,23 @@ namespace Game
 
             foreach (Enemy i in enemies)
             {
-                i.Update(dt);
-
+             
                 if (rand.Next(0, 100) < 2) { bullets.Add(i.Fire()); }
                 if (rand.Next(0, 100) < 5)
                 {
                     i.RandomDirection();
                 }
+                i.Update(dt);
             }
 
-            CheckEnenymiesCollisions(dt);
+
+            foreach (Enemy i in CheckEnenymiesCollisions())
+            {
+                i.Update(-dt);
+                i.Reverse();
+            }
+
+           
 
             CheckBulletsCollisions();
             UserUpdate(dt);
@@ -163,13 +170,13 @@ namespace Game
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
-            if (!CheckBounds(user, dt))
+            if (!CheckBounds(user))
             {
                 if (checkWalls(user))
                 {
-                    user.Reverse();
-                    user.Update(dt);
-                    user.Reverse();
+                    
+                    user.Update(-dt);
+                   
                 }
                 else if (pressedKeys.Contains(Key.W))
                 {
@@ -190,19 +197,19 @@ namespace Game
             }
         }
 
-        IEnumerable<GameObj> CheckEnenymiesCollisions(float dt)//Можно ли меньше циклов ? хм ???
+        IEnumerable<GameObj> CheckEnenymiesCollisions()//Можно ли меньше циклов ? хм ???
         {
             List<Enemy> collisions = new List<Enemy>();
             List<Enemy> shooted = new List<Enemy>();
             List<GameObj> splicebullet = new List<GameObj>();
-
+            List<Enemy> enemywenemy = new List<Enemy>();
             foreach (Enemy i in enemies)
             {
                 if (checkWalls(i))
                     collisions.Add(i);
 
 
-                if (CheckBounds(i, dt))
+                if (CheckBounds(i))
                 {
                     collisions.Add(i);
                 }
@@ -235,11 +242,10 @@ namespace Game
             }
 
             collisions = collisions.Distinct().ToList();
-            foreach (var i in collisions)
-            {
-                i.Reverse();
-                i.Update(dt);
-            }
+            //foreach (var i in collisions)
+            //{
+            //    i.Reverse();
+            //}
 
             shooted.ForEach(x => enemies.Remove(x));
             splicebullet.ForEach(x => user.bullets.Remove(x));
@@ -276,7 +282,7 @@ namespace Game
                     OnGameOver?.Invoke();
                     break;
                 }
-                if (CheckBounds(i, 0))
+                if (CheckBounds(i))
                 {
                     outofrange.Add(i);
                 }
@@ -290,7 +296,7 @@ namespace Game
                     outofrange.Add(i);
                 }
 
-                if (CheckBounds(i, 0))
+                if (CheckBounds(i))
                 {
                     outofrange.Add(i);
                 }
@@ -299,7 +305,7 @@ namespace Game
             outofrange.ForEach(x => user.bullets.Remove(x));
         }
 
-        bool CheckBounds(GameObj obj, float dt)
+        bool CheckBounds(GameObj obj)
         {
             if (obj.pos.X < 0)
             {
