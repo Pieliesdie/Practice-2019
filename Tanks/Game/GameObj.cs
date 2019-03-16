@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 
@@ -63,11 +64,17 @@ namespace Game
         public bool CanDestroy; //??????
         public bool Done;
         protected bool once;
-        List<Bitmap> animation;
 
-        int i;
+        DateTime lastAnimation = DateTime.Now;
+        List<Bitmap> animation;
+        int animationSpeed = 18;
+        float i=0;
         void NextPicture()
         {
+            var now = DateTime.Now;
+            var dt = (float)(now - lastAnimation).TotalSeconds;
+            lastAnimation = now;
+
             if (animation != null && !Done)
             {
                 if (i > animation.Count - 1)
@@ -76,7 +83,8 @@ namespace Game
                     if (once)
                         Done = true;
                 }
-                image = animation[i++];
+                image = animation[(int)i];
+                i += dt*animationSpeed;
             }
         }
 
