@@ -18,11 +18,17 @@ namespace Tanks
 
         void Init()
         {
+            if (game != null)
+            {
+                game.OnGameOver -= GameOver;
+                game.OnWinGame -= Win;
+            }
             game = new Game.Game(5, 5, gameSpeed, new Size(pictureBox1.Width, pictureBox1.Height));
             controller = new UserController(game, this);
             game.OnGameOver += GameOver;
             game.OnWinGame += Win;
             pictureBox1.BackgroundImage = Game.Game.background;
+            lasttime = DateTime.Now;
             timer1.Enabled = true;
         }
 
@@ -44,7 +50,6 @@ namespace Tanks
             timer1.Enabled = false;
             MessageBox.Show("GameOver");
             Init();
-            timer1.Enabled = true;
         }
 
         void DrawObject(GameObj i)
@@ -70,7 +75,7 @@ namespace Tanks
         {
             Score_label.Text = $"Score: {game.Score}";
             var now = DateTime.Now;
-            var dt = (float)(now - lasttime).TotalSeconds;
+            var dt = (float)(now - lasttime).TotalSeconds%1;
             lasttime = now;
 
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -94,6 +99,7 @@ namespace Tanks
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
             Init();
         }
     }

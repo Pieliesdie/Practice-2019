@@ -45,8 +45,8 @@ namespace Game
 
         public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Concat(walls).Concat(stars).Concat(animations).Append(user);
 
-        private Size userSize = new Size(60, 40);
-        private Size enemySize = new Size(60, 40);
+        private Size userSize = new Size(50, 50);
+        private Size enemySize = new Size(50, 50);
         private Size exploisonsSize = new Size(50, 50);
         private Random rand = new Random();
         public readonly int countOfTanks;
@@ -70,18 +70,18 @@ namespace Game
             this.speed = speed;
             this.size = size;
 
-            user = new User(new PointF(size.Width / 2, size.Height / 2), userSize, this.speed + 5, playerSprite);
+            user = new User(new PointF(size.Width / 2, size.Height / 2), userSize, this.speed + 5, playerSprite) { name = "user" };
 
             while (stars.Count() < countOfStars)
             {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6));
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6)) {name="star" };
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
 
             while (walls.Count < 8)
             {
-                var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallSprite);
+                var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallSprite) { name = "wall" };
                 walls.Add(wall);
                 if (user.HitBox.IntersectsWith(wall.HitBox) || CheckEnenymiesCollisions().Count() != 0)
                 {
@@ -91,12 +91,21 @@ namespace Game
             }
             while (enemies.Count() < countOfTanks)
             {
-                var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite);
-                enemies.Add(enemy);
-                if (CheckEnenymiesCollisions().Count() != 0)
+                //Возможно лишнее и CheckEnenymiesCollisions() хватало. не уверен
+                var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite) { name = "enemy" };
+                bool canAdd = true;
+                foreach (var i in enemies.Concat(walls).Append(user))
                 {
-                    enemies.Remove(enemy);
+                    var r1 = new PointF(enemy.pos.X + enemy.HitBox.Width / 2, enemy.pos.Y + enemy.HitBox.Height / 2);
+                    var r2 = new PointF(i.pos.X + i.HitBox.Width / 2, i.pos.Y + i.HitBox.Height / 2);
+                    if (Math.Sqrt(Math.Pow(r2.X - r1.X, 2) + Math.Pow(r2.Y - r1.Y, 2)) < Math.Max(enemySize.Width * 2, enemySize.Height * 2))
+                    {
+                        canAdd = false;
+                        break;
+                    }
                 }
+                if (canAdd)
+                    enemies.Add(enemy);
             }
         }
         DateTime lastFire = DateTime.Now;
@@ -110,23 +119,25 @@ namespace Game
 
             foreach (Enemy i in enemies)
             {
-             
                 if (rand.Next(0, 100) < 2) { bullets.Add(i.Fire()); }
-                if (rand.Next(0, 100) < 5)
-                {
-                    i.RandomDirection();
-                }
                 i.Update(dt);
             }
 
-
-            foreach (Enemy i in CheckEnenymiesCollisions())
+            var tmp = CheckEnenymiesCollisions();
+            foreach (Enemy i in tmp)
             {
                 i.Update(-dt);
                 i.Reverse();
             }
 
-           
+            foreach (Enemy i in enemies.Except(tmp))
+            {
+                if (rand.Next(0, 100) < 5)
+                {
+                    i.RandomDirection();
+                }
+            }
+
 
             CheckBulletsCollisions();
             UserUpdate(dt);
@@ -145,6 +156,7 @@ namespace Game
 
         void UserUpdate(float dt)
         {
+           
             List<GameObj> doneAnimation = new List<GameObj>();
             foreach (var anim in animations)
             {
@@ -166,7 +178,7 @@ namespace Game
             starremove.ForEach(x => stars.Remove(x));
             while (stars.Count() < countOfStars)
             {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6));
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6)) { name = "star" };
                 if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
                     stars.Add(star);
             }
@@ -174,9 +186,7 @@ namespace Game
             {
                 if (checkWalls(user))
                 {
-                    
                     user.Update(-dt);
-                   
                 }
                 else if (pressedKeys.Contains(Key.W))
                 {
@@ -194,10 +204,14 @@ namespace Game
                 {
                     user.Move(Direction.left, dt);
                 }
+                else
+                {
+                    user.Update(dt);
+                }
             }
         }
 
-        IEnumerable<GameObj> CheckEnenymiesCollisions()//Можно ли меньше циклов ? хм ???
+        IEnumerable<GameObj> CheckEnenymiesCollisions()
         {
             List<Enemy> collisions = new List<Enemy>();
             List<Enemy> shooted = new List<Enemy>();
@@ -226,7 +240,7 @@ namespace Game
                     {
                         splicebullet.Add(j);
                         shooted.Add(i);
-                        var boom = new GameObj(j.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 13), once: true);
+                        var boom = new GameObj(j.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 13), once: true) { name = "animation" };
                         animations.Add(boom);
                     }
                 }
@@ -273,7 +287,7 @@ namespace Game
                 if (checkWalls(i))
                 {
                     outofrange.Add(i);
-                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 7), once: true);
+                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 7), once: true) {name = "animation" };
                     animations.Add(boom);
                 }
 
@@ -291,7 +305,7 @@ namespace Game
             {
                 if (checkWalls(i))
                 {
-                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, 39), 13), once: true);
+                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, 39), 13), once: true) {name="animation" };
                     animations.Add(boom);
                     outofrange.Add(i);
                 }

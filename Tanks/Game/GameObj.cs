@@ -10,7 +10,7 @@ namespace Game
         delegate void ImageChanged();
         event ImageChanged OnImageChanged;
 
-        public string name => this.ToString();
+        public string name { get; internal set; }
         public int speed;
         public PointF pos;
         protected Bitmap image;
@@ -88,14 +88,14 @@ namespace Game
             }
         }
 
-        private Size size;
+        private SizeF size;
         [Browsable(false)]
-        public Size Size
-        {
+        public SizeF Size
+        {          
             get
             {
                 if (Direction == Direction.top || Direction == Direction.bot)
-                    return new Size(size.Height, size.Width);
+                    return new SizeF(size.Height, size.Width);
                 return size;
             }
             set => size = value;
@@ -103,7 +103,7 @@ namespace Game
 
         protected Direction Direction;
 
-        public GameObj(PointF pos, Size size, int speed = 0, Direction direction = Direction.right, Bitmap image = null, List<Bitmap> animation = null, bool once = false)
+        public GameObj(PointF pos, SizeF size, int speed = 0, Direction direction = Direction.right, Bitmap image = null, List<Bitmap> animation = null, bool once = false)
         {
             this.pos = pos;
             this.Size = size;
@@ -145,7 +145,7 @@ namespace Game
 
         public GameObj Fire()
         {
-            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction, Game.bulletSprite);
+            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction, Game.bulletSprite) {name = "bullet" };
         }
 
         public static Image RotateImage(Image img, RotateFlipType flipType)

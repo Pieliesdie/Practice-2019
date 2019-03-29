@@ -7,7 +7,7 @@ namespace Game
     {
         static Random rand;
 
-        public Enemy(PointF pos, int speed, Size size, Bitmap image = null) : base(pos, size, image: image)
+        public Enemy(PointF pos, int speed, SizeF size, Bitmap image = null) : base(pos, size, image: image)
         {
             this.speed = speed;
             rand = new Random();
