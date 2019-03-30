@@ -10,6 +10,7 @@ namespace Game
         delegate void ImageChanged();
         event ImageChanged OnImageChanged;
 
+        public bool moveable;
         public string name { get; internal set; }
         public int speed;
         public PointF pos;
@@ -25,6 +26,8 @@ namespace Game
                 {
                     return null;
                 }
+                if (moveable == false && animation == null)
+                    return image;
                 Bitmap result = null;
                 switch (Direction)
                 {
@@ -114,7 +117,7 @@ namespace Game
             this.once = once;
         }
 
-        public RectangleF HitBox => new RectangleF(pos, size);
+        public RectangleF HitBox => new RectangleF(pos, Size);
 
         public void Update(float dt)
         {
@@ -145,7 +148,7 @@ namespace Game
 
         public GameObj Fire()
         {
-            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction, Game.bulletSprite) {name = "bullet" };
+            return new GameObj(new PointF(pos.X + Size.Width / 2, pos.Y + Size.Height / 2), new Size(25, 15), speed * 200 / 100, Direction, Game.bulletSprite) { name = $"{this.name}bullet", moveable = true };
         }
 
         public static Image RotateImage(Image img, RotateFlipType flipType)

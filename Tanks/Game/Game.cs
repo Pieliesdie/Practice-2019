@@ -26,6 +26,7 @@ namespace Game
     // -------------------------------------------------------------- 
     public class Game
     {
+        #region variables
         public List<Key> pressedKeys = new List<Key>();
         public int Score { get; set; }
 
@@ -42,9 +43,11 @@ namespace Game
         public static readonly Bitmap wallSprite = new Bitmap(Properties.Resources.RTS_Crate);
         public static readonly Bitmap starSprite = new Bitmap(Properties.Resources.stars);
         public static readonly Bitmap boomSprite = new Bitmap(Properties.Resources.boom);
+        public static readonly Bitmap waterSprite = new Bitmap(Properties.Resources.water);
 
-        public IEnumerable<GameObj> Objects => enemies.Concat(bullets).Concat(user.bullets).Concat(walls).Concat(stars).Concat(animations).Append(user);
+        public IEnumerable<GameObj> Objects => enemies.Concat(walls).Concat(bullets).Concat(user.bullets).Concat(stars).Concat(animations).Append(user);
 
+        private Size waterSize = new Size(140,60);
         private Size userSize = new Size(50, 50);
         private Size enemySize = new Size(50, 50);
         private Size exploisonsSize = new Size(50, 50);
@@ -61,6 +64,7 @@ namespace Game
         public List<GameObj> bullets = new List<GameObj>();
         public List<GameObj> stars = new List<GameObj>();
         public List<GameObj> animations = new List<GameObj>();
+        #endregion
 
         public Game(int countOfTanks, int countOfStars, int speed, Size size)
         {
@@ -70,29 +74,41 @@ namespace Game
             this.speed = speed;
             this.size = size;
 
-            user = new User(new PointF(size.Width / 2, size.Height / 2), userSize, this.speed + 5, playerSprite) { name = "user" };
+            user = new User(new PointF(size.Width / 2, size.Height / 2), userSize, this.speed + 5, playerSprite) { name = "user", moveable = true };
 
-            while (stars.Count() < countOfStars)
-            {
-                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6)) {name="star" };
-                if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
-                    stars.Add(star);
-            }
-
+          
             while (walls.Count < 8)
             {
-                var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallSprite) { name = "wall" };
+                bool canDestroy = (rand.NextDouble() < 0.5) ? true : false;
+                var wallsprite = canDestroy ? Properties.Resources.RTS_Crate1 : wallSprite;
+                var wall = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, image: wallsprite) { name = "wall", CanDestroy = canDestroy };
                 walls.Add(wall);
                 if (user.HitBox.IntersectsWith(wall.HitBox) || CheckEnenymiesCollisions().Count() != 0)
                 {
                     walls.Remove(wall);
                 }
-
             }
+
+            while (walls.Count < 12)
+            {
+                bool canAdd = true;
+                var randDirection = (rand.NextDouble() < 0.5) ? Direction.bot : Direction.right;
+                var water = new GameObj(new PointF(rand.Next(size.Width - waterSize.Width), rand.Next(size.Height - waterSize.Height)), waterSize, image: waterSprite,direction:randDirection) { name = "water" };
+                foreach(var i in walls.Append(user))
+                {
+                    if (i.name == "water")
+                        continue;
+                    if (i.HitBox.IntersectsWith(water.HitBox))
+                        canAdd = false;
+                }
+                if(canAdd)
+                    walls.Add(water);
+            }          
+
             while (enemies.Count() < countOfTanks)
             {
                 //Возможно лишнее и CheckEnenymiesCollisions() хватало. не уверен
-                var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite) { name = "enemy" };
+                var enemy = new Enemy(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), speed, enemySize, enemySprite) { name = "enemy", moveable = true };
                 bool canAdd = true;
                 foreach (var i in enemies.Concat(walls).Append(user))
                 {
@@ -106,6 +122,13 @@ namespace Game
                 }
                 if (canAdd)
                     enemies.Add(enemy);
+            }
+
+            while (stars.Count() < countOfStars)
+            {
+                var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6)) { name = "star" };
+                if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star, out _))
+                    stars.Add(star);
             }
         }
         DateTime lastFire = DateTime.Now;
@@ -156,7 +179,7 @@ namespace Game
 
         void UserUpdate(float dt)
         {
-           
+
             List<GameObj> doneAnimation = new List<GameObj>();
             foreach (var anim in animations)
             {
@@ -179,35 +202,30 @@ namespace Game
             while (stars.Count() < countOfStars)
             {
                 var star = new GameObj(new PointF(rand.Next(size.Width - enemySize.Width), rand.Next(size.Height - enemySize.Height)), enemySize, animation: GetListFromImage(starSprite, new Size(84, starSprite.Height), 6)) { name = "star" };
-                if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star))
+                if (!user.HitBox.IntersectsWith(star.HitBox) && !checkWalls(star,out _))
                     stars.Add(star);
             }
-            if (!CheckBounds(user))
+            user.Update(dt);
+            if (checkWalls(user, out _) || CheckBounds(user))
             {
-                if (checkWalls(user))
-                {
-                    user.Update(-dt);
-                }
-                else if (pressedKeys.Contains(Key.W))
-                {
-                    user.Move(Direction.top, dt);
-                }
-                else if (pressedKeys.Contains(Key.S))
-                {
-                    user.Move(Direction.bot, dt);
-                }
-                else if (pressedKeys.Contains(Key.D))
-                {
-                    user.Move(Direction.right, dt);
-                }
-                else if (pressedKeys.Contains(Key.A))
-                {
-                    user.Move(Direction.left, dt);
-                }
-                else
-                {
-                    user.Update(dt);
-                }
+                user.Update(-dt);
+                user.Reverse();
+            }
+            else if (pressedKeys.Contains(Key.W))
+            {
+                user.Move(Direction.top, 0);
+            }
+            else if (pressedKeys.Contains(Key.S))
+            {
+                user.Move(Direction.bot, 0);
+            }
+            else if (pressedKeys.Contains(Key.D))
+            {
+                user.Move(Direction.right, 0);
+            }
+            else if (pressedKeys.Contains(Key.A))
+            {
+                user.Move(Direction.left, 0);
             }
         }
 
@@ -219,7 +237,7 @@ namespace Game
             List<Enemy> enemywenemy = new List<Enemy>();
             foreach (Enemy i in enemies)
             {
-                if (checkWalls(i))
+                if (checkWalls(i, out _))
                     collisions.Add(i);
 
 
@@ -256,60 +274,50 @@ namespace Game
             }
 
             collisions = collisions.Distinct().ToList();
-            //foreach (var i in collisions)
-            //{
-            //    i.Reverse();
-            //}
-
             shooted.ForEach(x => enemies.Remove(x));
             splicebullet.ForEach(x => user.bullets.Remove(x));
             return collisions;
         }
 
-        bool checkWalls(GameObj obj)
+        bool checkWalls(GameObj obj,out GameObj collis)
         {
+            collis = null;
             foreach (var i in walls)
             {
                 if (obj.HitBox.IntersectsWith(i.HitBox) && i != obj)
                 {
+                    collis = i;
                     return true;
                 }
-            }
+            }           
             return false;
         }
 
-        void CheckBulletsCollisions()//???
+        void CheckBulletsCollisions()
         {
             List<GameObj> outofrange = new List<GameObj>();
 
-            foreach (GameObj i in bullets)
+            foreach (GameObj i in bullets.Concat(user.bullets))
             {
-                if (checkWalls(i))
+                if (checkWalls(i, out GameObj col))
                 {
-                    outofrange.Add(i);
-                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 7), once: true) {name = "animation" };
-                    animations.Add(boom);
+                    if (col.name == "wall")
+                    {
+                        outofrange.Add(i);
+                        var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, boomSprite.Height), 7), once: true) { name = "animation" };
+                        animations.Add(boom);
+                        if (col.CanDestroy == true)
+                        {
+                            walls.Remove(col);
+                        }
+                    }
                 }
 
-                if (i.HitBox.IntersectsWith(user.HitBox))
+                if (i.HitBox.IntersectsWith(user.HitBox)&&i.name=="enemybullet")
                 {
                     OnGameOver?.Invoke();
                     break;
                 }
-                if (CheckBounds(i))
-                {
-                    outofrange.Add(i);
-                }
-            }
-            foreach (GameObj i in user.bullets)
-            {
-                if (checkWalls(i))
-                {
-                    var boom = new GameObj(i.pos, exploisonsSize, animation: GetListFromImage(boomSprite, new Size(39, 39), 13), once: true) {name="animation" };
-                    animations.Add(boom);
-                    outofrange.Add(i);
-                }
-
                 if (CheckBounds(i))
                 {
                     outofrange.Add(i);
